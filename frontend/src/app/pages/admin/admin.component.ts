@@ -67,7 +67,7 @@ export class AdminComponent implements OnInit {
   
   genres = ['Acción', 'Comedia', 'Drama', 'Terror', 'Ciencia Ficción', 'Romance', 'Thriller', 'Animación'];
   
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://cinenoir-api.onrender.com/api';
 
   constructor(
     private http: HttpClient,

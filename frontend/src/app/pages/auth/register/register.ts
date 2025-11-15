@@ -42,7 +42,7 @@ export class RegisterComponent {
 
     this.isLoading = true;
 
-    this.http.post('http://localhost:3000/api/auth/register', {
+    this.http.post('https://cinenoir-api.onrender.com/api/auth/register', {
       email: this.email,
       password: this.password,
       username: this.username

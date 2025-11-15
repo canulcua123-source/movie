@@ -9,7 +9,16 @@ const adminRoutes = require('./routes/admin.routes');
 
 const app = express();
 
-app.use(cors());
+// Configuración de CORS
+const corsOptions = {
+  origin: ['http://localhost:4200', 'http://localhost:4000', 'https://cinenoir-api.onrender.com'],
+  credentials: true,
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Endpoint de salud simple

@@ -61,7 +61,7 @@ export class MoviesComponent implements OnInit {
       'Authorization': `Bearer ${token}`
     });
 
-    this.http.get<Movie[]>('http://localhost:3000/api/movies', { headers }).subscribe({
+    this.http.get<Movie[]>('https://cinenoir-api.onrender.com/api/movies', { headers }).subscribe({
       next: (data) => {
         const endTime = performance.now();
         console.log(`✅ Películas cargadas en ${(endTime - startTime).toFixed(0)}ms`);

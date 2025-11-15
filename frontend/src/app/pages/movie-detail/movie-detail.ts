@@ -52,7 +52,7 @@ export class MovieDetailComponent implements OnInit {
   editingReviewId: string | null = null;
   currentUserId: string = '';
   
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://cinenoir-api.onrender.com/api';
   private movieId: string = '';
 
   constructor(
