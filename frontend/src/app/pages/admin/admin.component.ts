@@ -346,22 +346,35 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  private deletingMovieId: string | null = null;
+
   deleteMovie(movie: Movie) {
+    // Prevenir múltiples clicks
+    if (this.deletingMovieId === movie.id) {
+      console.log('⏳ Ya hay una eliminación en curso...');
+      return;
+    }
+
     if (!confirm(`¿Estás seguro de eliminar "${movie.title}"?\n\nEsta acción no se puede deshacer.`)) {
       return;
     }
+
+    this.deletingMovieId = movie.id;
+    console.log('🗑️ Eliminando película:', movie.id);
 
     this.http.delete(`${this.apiUrl}/movies/${movie.id}`, { headers: this.getHeaders() })
       .subscribe({
         next: () => {
           console.log('✅ Película eliminada');
           alert('Película eliminada correctamente');
+          this.deletingMovieId = null;
           this.loadMovies();
           this.loadDashboard(); // Actualizar stats
         },
         error: (error) => {
           console.error('❌ Error al eliminar película:', error);
           alert('Error al eliminar película: ' + (error.error?.message || 'Error desconocido'));
+          this.deletingMovieId = null;
         }
       });
   }

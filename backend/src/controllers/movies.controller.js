@@ -131,20 +131,48 @@ async function updateMovie(req, res) {
 // DELETE /api/movies/:id (admin)
 async function deleteMovie(req, res) {
   const { id } = req.params;
+  console.log('🗑️ Intentando eliminar película:', id);
 
   try {
+    // Primero eliminar reviews asociadas
+    const { error: reviewsError } = await supabase
+      .from('reviews')
+      .delete()
+      .eq('movie_id', id);
+
+    if (reviewsError) {
+      console.error('❌ Error eliminando reviews:', reviewsError);
+    } else {
+      console.log('✅ Reviews eliminadas');
+    }
+
+    // Luego eliminar favoritos asociados
+    const { error: favoritesError } = await supabase
+      .from('favorites')
+      .delete()
+      .eq('movie_id', id);
+
+    if (favoritesError) {
+      console.error('❌ Error eliminando favoritos:', favoritesError);
+    } else {
+      console.log('✅ Favoritos eliminados');
+    }
+
+    // Finalmente eliminar la película
     const { error } = await supabase
       .from('movies')
       .delete()
       .eq('id', id);
 
     if (error) {
-      console.error('Error deleting movie:', error);
-      return res.status(500).json({ message: 'Error al eliminar película' });
+      console.error('❌ Error deleting movie:', error);
+      return res.status(500).json({ message: 'Error al eliminar película: ' + error.message });
     }
 
+    console.log('✅ Película eliminada exitosamente');
     return res.status(204).send();
   } catch (err) {
+    console.error('❌ Error catch en deleteMovie:', err);
     return res.status(500).json({ message: 'Error interno al eliminar película', error: err.message });
   }
 }
