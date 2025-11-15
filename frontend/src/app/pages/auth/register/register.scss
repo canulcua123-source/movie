@@ -1,0 +1,139 @@
+.register {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: radial-gradient(circle at top, #181818, #121212 60%);
+}
+
+.register__left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--color-border-soft);
+  /* Imagen local ubicada en public/840_560.jpg */
+  background-image:
+    linear-gradient(135deg, rgba(0, 0, 0, 0.82), rgba(18, 18, 18, 0.7)),
+    url('/840_560.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.register__left-inner {
+  max-width: 420px;
+  padding: 2.5rem;
+}
+
+.register__left-inner h2 {
+  margin: 0 0 0.75rem;
+  font-size: 2rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.register__left-inner p {
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
+.register__card {
+  background: var(--color-bg-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.register__card-inner {
+  width: 100%;
+  max-width: 440px;
+}
+
+.register__card-inner h1 {
+  margin: 0 0 0.6rem;
+  font-size: 1.8rem;
+}
+
+.register__subtitle {
+  margin: 0 0 2rem;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
+.register__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.register__form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.register__form span {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.register__form input {
+  padding: 0.75rem 1rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--color-border-soft);
+  background: rgba(18, 18, 18, 0.6);
+  color: var(--color-text-main);
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.register__form input:focus {
+  outline: none;
+  border-color: var(--color-accent-primary);
+  background: rgba(18, 18, 18, 0.9);
+}
+
+.register__submit {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.register__login-link {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.register__login-link a {
+  color: var(--color-accent-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.register__login-link a:hover {
+  color: var(--color-accent-primary-hover);
+  text-decoration: underline;
+}
+
+.register__error {
+  margin: 1rem 0 0;
+  font-size: 0.875rem;
+  color: var(--color-accent-primary);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .register {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .register__card-inner {
+    margin-inline: 1rem;
+  }
+}

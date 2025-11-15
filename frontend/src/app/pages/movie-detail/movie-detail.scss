@@ -1,0 +1,453 @@
+.movie-detail {
+  min-height: 100vh;
+  background: var(--color-bg-main);
+}
+
+// Header
+.movie-detail__header {
+  background: var(--color-bg-card);
+  border-bottom: 1px solid var(--color-border-soft);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.movie-detail__header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.movie-detail__back {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  background: transparent;
+  border: 1px solid var(--color-border-soft);
+  color: var(--color-text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.movie-detail__back:hover {
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+  background: transparent;
+  box-shadow: none;
+}
+
+.movie-detail__logo {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent-primary);
+}
+
+.movie-detail__nav {
+  margin-left: auto;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.movie-detail__nav-link {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.movie-detail__nav-link:hover {
+  color: var(--color-text-main);
+}
+
+// Loading & Error
+.movie-detail__loading,
+.movie-detail__error {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-text-secondary);
+}
+
+.movie-detail__error button {
+  margin-top: 1rem;
+}
+
+// Hero Section
+.movie-detail__hero {
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.movie-detail__hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px);
+  transform: scale(1.1);
+}
+
+.movie-detail__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(18, 18, 18, 0.95), rgba(18, 18, 18, 0.7));
+}
+
+.movie-detail__hero-content {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  display: flex;
+  gap: 3rem;
+  width: 100%;
+}
+
+.movie-detail__poster {
+  flex-shrink: 0;
+  width: 300px;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.movie-detail__poster img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.movie-detail__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.movie-detail__title {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.movie-detail__meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.movie-detail__rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.movie-detail__star {
+  color: var(--color-text-disabled);
+  font-size: 1.5rem;
+}
+
+.movie-detail__star--full {
+  color: var(--color-star);
+}
+
+.movie-detail__star--half {
+  color: var(--color-star);
+  opacity: 0.5;
+}
+
+.movie-detail__rating-value {
+  margin-left: 0.5rem;
+  font-size: 1.2rem;
+  color: var(--color-text-main);
+  font-weight: 600;
+}
+
+.movie-detail__description {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  max-width: 800px;
+}
+
+.movie-detail__favorite-btn {
+  align-self: flex-start;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  background: transparent;
+  border: 2px solid var(--color-text-secondary);
+  color: var(--color-text-main);
+  transition: all 0.2s ease;
+}
+
+.movie-detail__favorite-btn:hover {
+  border-color: var(--color-accent-primary);
+  background: transparent;
+  box-shadow: none;
+}
+
+.movie-detail__favorite-btn--active {
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+}
+
+// Reviews Section
+.movie-detail__reviews-section {
+  background: var(--color-bg-main);
+  padding: 3rem 0;
+}
+
+.movie-detail__reviews-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.movie-detail__section-title {
+  margin: 0 0 2rem;
+  font-size: 1.8rem;
+  color: var(--color-text-main);
+}
+
+// New Review Form
+.movie-detail__new-review {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-soft);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 3rem;
+}
+
+.movie-detail__new-review h3 {
+  margin: 0 0 1.5rem;
+  font-size: 1.2rem;
+  color: var(--color-text-main);
+}
+
+.movie-detail__rating-input {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.movie-detail__rating-input label {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
+.movie-detail__rating-select {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border-soft);
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.movie-detail__review-textarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border-soft);
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.movie-detail__review-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent-primary);
+}
+
+.movie-detail__review-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.movie-detail__submit-review {
+  padding: 0.75rem 2rem;
+  flex: 1;
+}
+
+.movie-detail__cancel-review {
+  padding: 0.75rem 2rem;
+  background: transparent;
+  border: 1px solid var(--color-border-soft);
+  color: var(--color-text-secondary);
+}
+
+.movie-detail__cancel-review:hover {
+  border-color: var(--color-text-main);
+  color: var(--color-text-main);
+  background: transparent;
+  box-shadow: none;
+}
+
+// Reviews List
+.movie-detail__reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.movie-detail__no-reviews {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-secondary);
+}
+
+.movie-detail__review {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-soft);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: border-color 0.2s ease;
+}
+
+.movie-detail__review--mine {
+  border-color: var(--color-accent-primary);
+  background: rgba(229, 9, 20, 0.05);
+}
+
+.movie-detail__review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.movie-detail__review-info {
+  flex: 1;
+}
+
+.movie-detail__review-author {
+  font-weight: 600;
+  color: var(--color-text-main);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.movie-detail__review-badge {
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--color-accent-primary);
+  color: white;
+  letter-spacing: 0.05em;
+}
+
+.movie-detail__review-actions-btn {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.movie-detail__review-edit,
+.movie-detail__review-delete {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border-soft);
+  background: var(--color-bg-main);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.movie-detail__review-edit:hover {
+  border-color: var(--color-accent-primary);
+  background: rgba(229, 9, 20, 0.1);
+  transform: none;
+  box-shadow: none;
+}
+
+.movie-detail__review-delete:hover {
+  border-color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+  transform: none;
+  box-shadow: none;
+}
+
+.movie-detail__review-rating {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.movie-detail__review-star {
+  color: var(--color-text-disabled);
+  font-size: 1rem;
+}
+
+.movie-detail__review-star--full {
+  color: var(--color-star);
+}
+
+.movie-detail__review-comment {
+  margin: 0 0 1rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.movie-detail__review-date {
+  font-size: 0.85rem;
+  color: var(--color-text-disabled);
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .movie-detail__hero-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .movie-detail__poster {
+    width: 250px;
+  }
+
+  .movie-detail__title {
+    font-size: 2rem;
+  }
+
+  .movie-detail__meta {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .movie-detail__favorite-btn {
+    align-self: center;
+  }
+
+  .movie-detail__header-content {
+    flex-wrap: wrap;
+  }
+
+  .movie-detail__nav {
+    flex-basis: 100%;
+    justify-content: center;
+  }
+}

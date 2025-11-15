@@ -1,0 +1,97 @@
+<div class="favorites">
+  <!-- Header -->
+  <header class="favorites__header">
+    <div class="favorites__header-content">
+      <h1 class="favorites__logo">CineNoir</h1>
+      
+      <div class="favorites__search">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (input)="onSearch()"
+          placeholder="Buscar en favoritos..."
+          class="favorites__search-input"
+        />
+      </div>
+
+      <nav class="favorites__nav">
+        <a routerLink="/movies" class="favorites__nav-link">Películas</a>
+        <a routerLink="/favorites" class="favorites__nav-link favorites__nav-link--active">Favoritos</a>
+        <a routerLink="/profile" class="favorites__nav-link">Perfil</a>
+        <button class="favorites__logout" (click)="logout()">Salir</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="favorites__loading">
+    <div class="favorites__loading-spinner"></div>
+    <p>Cargando favoritos...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="favorites__error">
+    <p>{{ errorMessage }}</p>
+    <button (click)="loadFavorites()">Reintentar</button>
+  </div>
+
+  <!-- Favorites Content -->
+  <div *ngIf="!isLoading && !errorMessage" class="favorites__content">
+    <!-- Empty State -->
+    <div *ngIf="movies.length === 0" class="favorites__empty">
+      <div class="favorites__empty-icon">❤️</div>
+      <h2>No tienes favoritos aún</h2>
+      <p>Explora películas y guarda tus favoritas para verlas aquí</p>
+      <button routerLink="/movies">Explorar películas</button>
+    </div>
+
+    <!-- Movies Grid -->
+    <div *ngIf="movies.length > 0" class="favorites__movies">
+      <div class="favorites__header-info">
+        <h2>Mis Favoritos</h2>
+        <span class="favorites__count">{{ filteredMovies.length }} película{{ filteredMovies.length !== 1 ? 's' : '' }}</span>
+      </div>
+
+      <div *ngIf="filteredMovies.length === 0" class="favorites__no-results">
+        <p>No se encontraron películas con "{{ searchQuery }}"</p>
+      </div>
+
+      <div *ngIf="filteredMovies.length > 0" class="favorites__grid">
+        <div *ngFor="let movie of filteredMovies" class="favorite-card">
+          <div class="favorite-card__poster">
+            <img 
+              [src]="movie.poster_url || 'https://via.placeholder.com/300x450?text=Sin+Poster'" 
+              [alt]="movie.title"
+              class="favorite-card__image"
+            />
+            <div class="favorite-card__overlay">
+              <button class="favorite-card__btn" [routerLink]="['/movies', movie.id]">Ver detalles</button>
+              <button class="favorite-card__btn favorite-card__btn--remove" (click)="removeFavorite(movie.id)">
+                ❤️ Quitar
+              </button>
+            </div>
+          </div>
+          
+          <div class="favorite-card__info">
+            <h3 class="favorite-card__title">{{ movie.title }}</h3>
+            
+            <div class="favorite-card__meta">
+              <span class="favorite-card__year">{{ movie.year || movie.release_year }}</span>
+              <span class="favorite-card__genre">{{ (movie.genres && movie.genres[0]) || movie.genre }}</span>
+            </div>
+            
+            <div class="favorite-card__rating">
+              <span *ngFor="let star of getStars(movie.rating || 0)" 
+                    class="favorite-card__star" 
+                    [class.favorite-card__star--full]="star === 'full'" 
+                    [class.favorite-card__star--half]="star === 'half'">
+                ★
+              </span>
+              <span class="favorite-card__rating-value">{{ (movie.rating || 0).toFixed(1) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

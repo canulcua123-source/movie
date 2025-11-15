@@ -1,0 +1,58 @@
+<div class="login">
+  <div class="login__left">
+    <div class="login__left-inner">
+      <h2>CineNoir</h2>
+      <p>
+        Gestiona películas, guarda favoritas y comparte reseñas con una interfaz inspirada en las mejores plataformas de streaming.
+      </p>
+      <button class="btn btn--ghost" routerLink="/register">
+        Crear cuenta
+      </button>
+    </div>
+  </div>
+
+  <div class="login__card">
+    <div class="login__card-inner">
+      <h1>Iniciar sesión</h1>
+      <p class="login__subtitle">
+        Accede a tu cuenta para gestionar películas, reseñas y favoritos.
+      </p>
+
+      <form class="login__form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+        <label>
+          <span>Email</span>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            email
+          />
+        </label>
+
+        <label>
+          <span>Contraseña</span>
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            minlength="6"
+          />
+        </label>
+
+        <button
+          class="btn btn--primary login__submit"
+          type="submit"
+          [disabled]="loginForm.invalid || loading"
+        >
+          {{ loading ? 'Ingresando...' : 'Ingresar' }}
+        </button>
+
+        <p class="login__error" *ngIf="error">
+          {{ error }}
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

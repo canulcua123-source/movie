@@ -1,0 +1,162 @@
+<div class="movie-detail">
+  <!-- Header -->
+  <header class="movie-detail__header">
+    <div class="movie-detail__header-content">
+      <button class="movie-detail__back" (click)="goBack()">
+        ← Volver
+      </button>
+      <h1 class="movie-detail__logo">CineNoir</h1>
+      <nav class="movie-detail__nav">
+        <a routerLink="/movies" class="movie-detail__nav-link">Películas</a>
+        <a routerLink="/favorites" class="movie-detail__nav-link">Favoritos</a>
+        <a routerLink="/profile" class="movie-detail__nav-link">Perfil</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="movie-detail__loading">
+    <p>Cargando película...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="movie-detail__error">
+    <p>{{ errorMessage }}</p>
+    <button (click)="loadMovieDetail()">Reintentar</button>
+  </div>
+
+  <!-- Movie Content -->
+  <div *ngIf="movie && !isLoading" class="movie-detail__content">
+    <!-- Hero Section -->
+    <div class="movie-detail__hero">
+      <div class="movie-detail__hero-bg" [style.background-image]="'url(' + (movie.poster_url || 'https://via.placeholder.com/1920x1080') + ')'"></div>
+      <div class="movie-detail__hero-overlay"></div>
+      
+      <div class="movie-detail__hero-content">
+        <div class="movie-detail__poster">
+          <img 
+            [src]="movie.poster_url || 'https://via.placeholder.com/300x450?text=Sin+Poster'" 
+            [alt]="movie.title"
+          />
+        </div>
+        
+        <div class="movie-detail__info">
+          <h1 class="movie-detail__title">{{ movie.title }}</h1>
+          
+          <div class="movie-detail__meta">
+            <span class="movie-detail__year">{{ movie.year || movie.release_year }}</span>
+            <span class="movie-detail__genre">{{ (movie.genres && movie.genres[0]) || movie.genre }}</span>
+            <span class="movie-detail__director">Dir: {{ movie.director }}</span>
+          </div>
+          
+          <div class="movie-detail__rating">
+            <span *ngFor="let star of getStars(movie.rating || 0)" 
+                  class="movie-detail__star" 
+                  [class.movie-detail__star--full]="star === 'full'" 
+                  [class.movie-detail__star--half]="star === 'half'">
+              ★
+            </span>
+            <span class="movie-detail__rating-value">{{ (movie.rating || 0).toFixed(1) }}</span>
+          </div>
+          
+          <p class="movie-detail__description">{{ movie.synopsis || movie.description }}</p>
+          
+          <button 
+            class="movie-detail__favorite-btn" 
+            [class.movie-detail__favorite-btn--active]="isFavorite"
+            (click)="toggleFavorite()">
+            {{ isFavorite ? '❤️ En favoritos' : '🤍 Agregar a favoritos' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="movie-detail__reviews-section">
+      <div class="movie-detail__reviews-container">
+        <h2 class="movie-detail__section-title">Reseñas</h2>
+        
+        <!-- New Review Form -->
+        <div class="movie-detail__new-review">
+          <h3>{{ editingReviewId ? 'Editar tu reseña' : 'Escribe tu reseña' }}</h3>
+          
+          <div class="movie-detail__rating-input">
+            <label>Tu calificación:</label>
+            <select [(ngModel)]="newReviewRating" class="movie-detail__rating-select">
+              <option [value]="1">★ 1</option>
+              <option [value]="2">★★ 2</option>
+              <option [value]="3">★★★ 3</option>
+              <option [value]="4">★★★★ 4</option>
+              <option [value]="5">★★★★★ 5</option>
+            </select>
+          </div>
+          
+          <textarea 
+            [(ngModel)]="newReviewComment"
+            placeholder="Comparte tu opinión sobre esta película..."
+            class="movie-detail__review-textarea"
+            rows="4"
+          ></textarea>
+          
+          <div class="movie-detail__review-actions">
+            <button 
+              (click)="submitReview()"
+              [disabled]="!newReviewComment.trim() || isSubmittingReview"
+              class="movie-detail__submit-review">
+              {{ isSubmittingReview ? 'Enviando...' : (editingReviewId ? 'Actualizar reseña' : 'Publicar reseña') }}
+            </button>
+            
+            <button 
+              *ngIf="editingReviewId"
+              (click)="cancelEditReview()"
+              class="movie-detail__cancel-review">
+              Cancelar
+            </button>
+          </div>
+        </div>
+
+        <!-- Reviews List -->
+        <div class="movie-detail__reviews-list">
+          <div *ngIf="reviews.length === 0" class="movie-detail__no-reviews">
+            <p>Aún no hay reseñas. ¡Sé el primero en escribir una!</p>
+          </div>
+          
+          <div *ngFor="let review of reviews" class="movie-detail__review" [class.movie-detail__review--mine]="isMyReview(review)">
+            <div class="movie-detail__review-header">
+              <div class="movie-detail__review-info">
+                <span class="movie-detail__review-author">
+                  {{ review.username || 'Usuario' }}
+                  <span *ngIf="isMyReview(review)" class="movie-detail__review-badge">Tú</span>
+                </span>
+                <div class="movie-detail__review-rating">
+                  <span *ngFor="let star of getStars(review.rating)" 
+                        class="movie-detail__review-star"
+                        [class.movie-detail__review-star--full]="star === 'full'">
+                    ★
+                  </span>
+                </div>
+              </div>
+              
+              <div *ngIf="isMyReview(review)" class="movie-detail__review-actions-btn">
+                <button 
+                  class="movie-detail__review-edit"
+                  (click)="editReview(review)"
+                  title="Editar reseña">
+                  ✏️
+                </button>
+                <button 
+                  class="movie-detail__review-delete"
+                  (click)="deleteReview(review)"
+                  title="Eliminar reseña">
+                  🗑️
+                </button>
+              </div>
+            </div>
+            <p class="movie-detail__review-comment">{{ review.comment }}</p>
+            <span class="movie-detail__review-date">{{ review.created_at | date:'short' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

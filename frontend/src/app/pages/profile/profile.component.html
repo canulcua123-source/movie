@@ -1,0 +1,121 @@
+<div class="profile">
+  <!-- Header -->
+  <header class="profile__header">
+    <div class="profile__header-content">
+      <h1 class="profile__logo">CineNoir</h1>
+
+      <nav class="profile__nav">
+        <a routerLink="/movies" class="profile__nav-link">Películas</a>
+        <a routerLink="/favorites" class="profile__nav-link">Favoritos</a>
+        <a routerLink="/profile" class="profile__nav-link profile__nav-link--active">Perfil</a>
+        <button class="profile__logout" (click)="logout()">Salir</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="profile__loading">
+    <div class="profile__loading-spinner"></div>
+    <p>Cargando perfil...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="profile__error">
+    <p>{{ errorMessage }}</p>
+    <button (click)="loadProfile()">Reintentar</button>
+  </div>
+
+  <!-- Profile Content -->
+  <div *ngIf="user && !isLoading" class="profile__content">
+    <div class="profile__container">
+      
+      <!-- Profile Card -->
+      <div class="profile__card">
+        <div class="profile__avatar">
+          <div class="profile__avatar-circle">
+            <span class="profile__avatar-initial">{{ user.username.charAt(0).toUpperCase() }}</span>
+          </div>
+        </div>
+
+        <div class="profile__info">
+          <div class="profile__name-section">
+            <h2 *ngIf="!isEditing" class="profile__name">{{ user.username }}</h2>
+            <input 
+              *ngIf="isEditing" 
+              type="text" 
+              [(ngModel)]="editUsername"
+              class="profile__name-input"
+              placeholder="Nombre de usuario"
+            />
+            <span class="profile__badge" [ngClass]="getRoleBadgeClass()">
+              {{ getRoleLabel() }}
+            </span>
+          </div>
+
+          <p class="profile__email">{{ user.email }}</p>
+
+          <div class="profile__actions">
+            <button *ngIf="!isEditing" (click)="toggleEdit()" class="profile__btn profile__btn--edit">
+              Editar perfil
+            </button>
+            <div *ngIf="isEditing" class="profile__edit-actions">
+              <button (click)="saveProfile()" class="profile__btn profile__btn--save">
+                Guardar
+              </button>
+              <button (click)="toggleEdit()" class="profile__btn profile__btn--cancel">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="profile__stats">
+        <div class="profile__stat-card">
+          <div class="profile__stat-icon">❤️</div>
+          <div class="profile__stat-info">
+            <span class="profile__stat-value">{{ stats.totalFavorites }}</span>
+            <span class="profile__stat-label">Favoritos</span>
+          </div>
+        </div>
+
+        <div class="profile__stat-card">
+          <div class="profile__stat-icon">✍️</div>
+          <div class="profile__stat-info">
+            <span class="profile__stat-value">{{ stats.totalReviews }}</span>
+            <span class="profile__stat-label">Reviews</span>
+          </div>
+        </div>
+
+        <div class="profile__stat-card">
+          <div class="profile__stat-icon">⭐</div>
+          <div class="profile__stat-info">
+            <span class="profile__stat-value">{{ stats.averageRating.toFixed(1) }}</span>
+            <span class="profile__stat-label">Rating promedio</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="profile__quick-actions">
+        <h3>Acciones rápidas</h3>
+        <div class="profile__actions-grid">
+          <a routerLink="/movies" class="profile__action-card">
+            <span class="profile__action-icon">🎬</span>
+            <span class="profile__action-label">Explorar películas</span>
+          </a>
+          <a routerLink="/favorites" class="profile__action-card">
+            <span class="profile__action-icon">❤️</span>
+            <span class="profile__action-label">Ver favoritos</span>
+          </a>
+          <a *ngIf="user.role === 'admin'" routerLink="/admin" class="profile__action-card profile__action-card--admin">
+            <span class="profile__action-icon">⚙️</span>
+            <span class="profile__action-label">Panel Admin</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

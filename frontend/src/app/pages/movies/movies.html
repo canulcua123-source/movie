@@ -1,0 +1,90 @@
+<div class="movies">
+  <!-- Header -->
+  <header class="movies__header">
+    <div class="movies__header-content">
+      <h1 class="movies__logo">CineNoir</h1>
+      
+      <div class="movies__search">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (input)="onSearch()"
+          placeholder="Buscar películas..."
+          class="movies__search-input"
+        />
+      </div>
+
+      <nav class="movies__nav">
+        <a routerLink="/movies" class="movies__nav-link movies__nav-link--active">Películas</a>
+        <a routerLink="/favorites" class="movies__nav-link">Favoritos</a>
+        <a routerLink="/profile" class="movies__nav-link">Perfil</a>
+        <button class="movies__logout" (click)="logout()">Salir</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <div class="movies__filters">
+    <div class="movies__filters-content">
+      <label class="movies__filter">
+        <span>Género:</span>
+        <select [(ngModel)]="selectedGenre" (change)="onGenreChange()" class="movies__filter-select">
+          <option value="">Todos</option>
+          <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="movies__loading">
+    <div class="movies__loading-spinner"></div>
+    <p>Cargando películas...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="movies__error">
+    <p>{{ errorMessage }}</p>
+    <button (click)="loadMovies()">Reintentar</button>
+  </div>
+
+  <!-- Movies Grid -->
+  <div *ngIf="!isLoading && !errorMessage" class="movies__content">
+    <div *ngIf="filteredMovies.length === 0" class="movies__empty">
+      <p>No se encontraron películas</p>
+    </div>
+
+    <div *ngIf="filteredMovies.length > 0" class="movies__grid">
+      <div *ngFor="let movie of filteredMovies" class="movie-card">
+        <div class="movie-card__poster">
+          <img 
+            [src]="movie.poster_url || 'https://via.placeholder.com/300x450?text=Sin+Poster'" 
+            [alt]="movie.title"
+            class="movie-card__image"
+            (error)="onImageError($event)"
+            loading="lazy"
+          />
+          <div class="movie-card__overlay">
+            <button class="movie-card__btn" [routerLink]="['/movies', movie.id]">Ver detalles</button>
+          </div>
+        </div>
+        
+        <div class="movie-card__info">
+          <h3 class="movie-card__title">{{ movie.title }}</h3>
+          
+          <div class="movie-card__meta">
+            <span class="movie-card__year">{{ movie.year || movie.release_year }}</span>
+            <span class="movie-card__genre">{{ (movie.genres && movie.genres[0]) || movie.genre }}</span>
+          </div>
+          
+          <div class="movie-card__rating">
+            <span *ngFor="let star of getStars(movie.rating || 0)" class="movie-card__star" [class.movie-card__star--full]="star === 'full'" [class.movie-card__star--half]="star === 'half'">
+              ★
+            </span>
+            <span class="movie-card__rating-value">{{ (movie.rating || 0).toFixed(1) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

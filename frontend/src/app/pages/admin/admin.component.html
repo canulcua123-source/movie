@@ -1,0 +1,248 @@
+<div class="admin">
+  <!-- Header -->
+  <header class="admin__header">
+    <div class="admin__header-content">
+      <h1 class="admin__logo">CineNoir Admin</h1>
+
+      <nav class="admin__nav">
+        <a routerLink="/movies" class="admin__nav-link">Ver sitio</a>
+        <a routerLink="/profile" class="admin__nav-link">Mi perfil</a>
+        <button class="admin__logout" (click)="logout()">Salir</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <div class="admin__layout">
+    <aside class="admin__sidebar">
+      <button 
+        class="admin__menu-item" 
+        [class.admin__menu-item--active]="currentView === 'dashboard'"
+        (click)="switchView('dashboard')">
+        <span class="admin__menu-icon">📊</span>
+        Dashboard
+      </button>
+      <button 
+        class="admin__menu-item" 
+        [class.admin__menu-item--active]="currentView === 'movies'"
+        (click)="switchView('movies')">
+        <span class="admin__menu-icon">🎬</span>
+        Películas
+      </button>
+      <button 
+        class="admin__menu-item" 
+        [class.admin__menu-item--active]="currentView === 'users'"
+        (click)="switchView('users')">
+        <span class="admin__menu-icon">👥</span>
+        Usuarios
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin__main">
+      
+      <!-- Dashboard View -->
+      <div *ngIf="currentView === 'dashboard'" class="admin__view">
+        <h2 class="admin__title">Dashboard</h2>
+        
+        <div class="admin__stats">
+          <div class="admin__stat-card">
+            <div class="admin__stat-icon">🎬</div>
+            <div class="admin__stat-info">
+              <span class="admin__stat-value">{{ stats.totalMovies }}</span>
+              <span class="admin__stat-label">Películas</span>
+            </div>
+          </div>
+
+          <div class="admin__stat-card">
+            <div class="admin__stat-icon">👥</div>
+            <div class="admin__stat-info">
+              <span class="admin__stat-value">{{ stats.totalUsers }}</span>
+              <span class="admin__stat-label">Usuarios</span>
+            </div>
+          </div>
+
+          <div class="admin__stat-card">
+            <div class="admin__stat-icon">✍️</div>
+            <div class="admin__stat-info">
+              <span class="admin__stat-value">{{ stats.totalReviews }}</span>
+              <span class="admin__stat-label">Reviews</span>
+            </div>
+          </div>
+
+          <div class="admin__stat-card">
+            <div class="admin__stat-icon">❤️</div>
+            <div class="admin__stat-info">
+              <span class="admin__stat-value">{{ stats.totalFavorites }}</span>
+              <span class="admin__stat-label">Favoritos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Movies View -->
+      <div *ngIf="currentView === 'movies'" class="admin__view">
+        <div class="admin__view-header">
+          <h2 class="admin__title">Gestión de Películas</h2>
+          <button class="admin__btn admin__btn--primary" (click)="openMovieForm()">
+            + Nueva Película
+          </button>
+        </div>
+
+        <div class="admin__table-container">
+          <table class="admin__table">
+            <thead>
+              <tr>
+                <th>Póster</th>
+                <th>Título</th>
+                <th>Director</th>
+                <th>Año</th>
+                <th>Género</th>
+                <th>Rating</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let movie of movies">
+                <td>
+                  <img [src]="movie.poster_url" [alt]="movie.title" class="admin__movie-poster" />
+                </td>
+                <td class="admin__movie-title">{{ movie.title }}</td>
+                <td>{{ movie.director }}</td>
+                <td>{{ movie.year }}</td>
+                <td>{{ movie.genres && movie.genres[0] }}</td>
+                <td>{{ (movie.rating || 0).toFixed(1) }} ⭐</td>
+                <td>
+                  <div class="admin__actions">
+                    <button class="admin__btn admin__btn--small" (click)="openMovieForm(movie)">
+                      Editar
+                    </button>
+                    <button class="admin__btn admin__btn--small admin__btn--danger" (click)="deleteMovie(movie)">
+                      Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Users View -->
+      <div *ngIf="currentView === 'users'" class="admin__view">
+        <h2 class="admin__title">Gestión de Usuarios</h2>
+
+        <div class="admin__table-container">
+          <table class="admin__table">
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Fecha de registro</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users" [class.admin__user-banned]="user.banned">
+                <td>
+                  <div class="admin__user-info">
+                    <div class="admin__user-avatar">
+                      {{ user.username.charAt(0).toUpperCase() }}
+                    </div>
+                    <span class="admin__username">{{ user.username }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="admin__role-badge" [class.admin__role-badge--admin]="user.role === 'admin'">
+                    {{ user.role === 'admin' ? 'Administrador' : 'Usuario' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="admin__status-badge" [class.admin__status-badge--banned]="user.banned">
+                    {{ user.banned ? '🚫 Baneado' : '✅ Activo' }}
+                  </span>
+                </td>
+                <td>{{ user.created_at | date:'short' }}</td>
+                <td>
+                  <div class="admin__actions">
+                    <select 
+                      class="admin__role-select"
+                      [value]="user.role"
+                      (change)="changeUserRole(user, $any($event.target).value)">
+                      <option value="user">Usuario</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                    <button 
+                      class="admin__btn admin__btn--small"
+                      [class.admin__btn--danger]="!user.banned"
+                      [class.admin__btn--success]="user.banned"
+                      (click)="toggleUserBan(user)">
+                      {{ user.banned ? 'Desbanear' : 'Banear' }}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Movie Form Modal -->
+  <div *ngIf="showMovieForm" class="admin__modal" (click)="closeMovieForm()">
+    <div class="admin__modal-content" (click)="$event.stopPropagation()">
+      <div class="admin__modal-header">
+        <h3>{{ editingMovie ? 'Editar Película' : 'Nueva Película' }}</h3>
+        <button class="admin__modal-close" (click)="closeMovieForm()">×</button>
+      </div>
+
+      <form class="admin__form" (ngSubmit)="saveMovie()">
+        <div class="admin__form-group">
+          <label>Título *</label>
+          <input type="text" [(ngModel)]="movieForm.title" name="title" required />
+        </div>
+
+        <div class="admin__form-group">
+          <label>Sinopsis</label>
+          <textarea [(ngModel)]="movieForm.synopsis" name="synopsis" rows="4"></textarea>
+        </div>
+
+        <div class="admin__form-row">
+          <div class="admin__form-group">
+            <label>Género</label>
+            <select [(ngModel)]="movieForm.genre" name="genre">
+              <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+            </select>
+          </div>
+
+          <div class="admin__form-group">
+            <label>Año</label>
+            <input type="number" [(ngModel)]="movieForm.year" name="year" min="1900" [max]="2030" />
+          </div>
+        </div>
+
+        <div class="admin__form-group">
+          <label>Director *</label>
+          <input type="text" [(ngModel)]="movieForm.director" name="director" required />
+        </div>
+
+        <div class="admin__form-group">
+          <label>URL del Póster</label>
+          <input type="url" [(ngModel)]="movieForm.poster_url" name="poster_url" placeholder="https://..." />
+        </div>
+
+        <div class="admin__form-actions">
+          <button type="button" class="admin__btn admin__btn--secondary" (click)="closeMovieForm()">
+            Cancelar
+          </button>
+          <button type="submit" class="admin__btn admin__btn--primary" [disabled]="isSavingMovie">
+            {{ isSavingMovie ? 'Guardando...' : (editingMovie ? 'Actualizar' : 'Crear') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
