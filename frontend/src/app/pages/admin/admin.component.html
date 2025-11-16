@@ -117,8 +117,11 @@
                     <button class="admin__btn admin__btn--small" (click)="openMovieForm(movie)">
                       Editar
                     </button>
-                    <button class="admin__btn admin__btn--small admin__btn--danger" (click)="deleteMovie(movie)">
-                      Eliminar
+                    <button 
+                      class="admin__btn admin__btn--small admin__btn--danger" 
+                      (click)="deleteMovie(movie)"
+                      [disabled]="deletingMovieId === movie.id">
+                      {{ deletingMovieId === movie.id ? 'Eliminando...' : 'Eliminar' }}
                     </button>
                   </div>
                 </td>

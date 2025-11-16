@@ -346,7 +346,7 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  private deletingMovieId: string | null = null;
+  deletingMovieId: string | null = null;
 
   deleteMovie(movie: Movie) {
     // Prevenir múltiples clicks
@@ -366,15 +366,15 @@ export class AdminComponent implements OnInit {
       .subscribe({
         next: () => {
           console.log('✅ Película eliminada');
+          this.deletingMovieId = null; // Reset ANTES de recargar
           alert('Película eliminada correctamente');
-          this.deletingMovieId = null;
           this.loadMovies();
           this.loadDashboard(); // Actualizar stats
         },
         error: (error) => {
           console.error('❌ Error al eliminar película:', error);
+          this.deletingMovieId = null; // Reset ANTES de mostrar error
           alert('Error al eliminar película: ' + (error.error?.message || 'Error desconocido'));
-          this.deletingMovieId = null;
         }
       });
   }

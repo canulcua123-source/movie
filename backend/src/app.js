@@ -6,6 +6,7 @@ const moviesRoutes = require('./routes/movies.routes');
 const reviewsRoutes = require('./routes/reviews.routes');
 const favoritesRoutes = require('./routes/favorites.routes');
 const adminRoutes = require('./routes/admin.routes');
+const profileRoutes = require('./routes/profile.routes');
 
 const app = express();
 
@@ -31,5 +32,6 @@ app.use('/api/movies', moviesRoutes);
 app.use('/api/reviews', reviewsRoutes);
 app.use('/api/favorites', favoritesRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/profile', profileRoutes);
 
 module.exports = app;

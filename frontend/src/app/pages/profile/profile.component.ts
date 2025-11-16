@@ -81,35 +81,19 @@ export class ProfileComponent implements OnInit {
       'Authorization': `Bearer ${token}`
     });
 
-    let favoritesLoaded = false;
-    let reviewsLoaded = false;
-
-    // Cargar favoritos
-    this.http.get<any[]>(`${this.apiUrl}/favorites/me`, { headers }).subscribe({
-      next: (favorites) => {
-        this.stats.totalFavorites = favorites.length;
-        console.log(`✅ Favoritos cargados: ${favorites.length}`);
-        favoritesLoaded = true;
-        if (reviewsLoaded) this.checkLoadingComplete();
+    // Cargar estadísticas desde el backend
+    this.http.get<Stats>(`${this.apiUrl}/profile/stats`, { headers }).subscribe({
+      next: (stats) => {
+        this.stats = stats;
+        console.log('✅ Estadísticas cargadas:', stats);
+        this.isLoading = false;
       },
       error: (error) => {
-        console.error('❌ Error al cargar favoritos:', error);
-        favoritesLoaded = true;
-        if (reviewsLoaded) this.checkLoadingComplete();
+        console.error('❌ Error al cargar estadísticas:', error);
+        this.errorMessage = 'Error al cargar estadísticas';
+        this.isLoading = false;
       }
     });
-
-    // Cargar todas las reviews y filtrar por usuario
-    // Necesitamos cargar todas las películas y sus reviews para contar las del usuario
-    if (this.user) {
-      this.loadUserReviews(this.user.id, headers).then(() => {
-        reviewsLoaded = true;
-        if (favoritesLoaded) this.checkLoadingComplete();
-      });
-    } else {
-      reviewsLoaded = true;
-      if (favoritesLoaded) this.checkLoadingComplete();
-    }
   }
 
   async loadUserReviews(userId: string, headers: HttpHeaders) {
